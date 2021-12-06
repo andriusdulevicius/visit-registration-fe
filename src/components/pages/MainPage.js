@@ -1,7 +1,8 @@
 import React from 'react';
+import PublicScreen from '../PublicScreen/PublicScreen';
 
 const MainPage = () => {
-  return <div>Main home page</div>;
+  return <PublicScreen />;
 };
 
 export default MainPage;

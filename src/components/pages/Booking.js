@@ -1,7 +1,8 @@
 import React from 'react';
+import BookingScreen from '../BookingScreen/BookingScreen';
 
 const Booking = () => {
-  return <div>Booking page</div>;
+  return <BookingScreen />;
 };
 
 export default Booking;

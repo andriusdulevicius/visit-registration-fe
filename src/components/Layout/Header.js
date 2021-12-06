@@ -1,4 +1,5 @@
 import React from 'react';
+import css from './Header.module.css';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,22 +11,23 @@ const Header = () => {
   }
 
   return (
-    <header>
-      <Link to='/'>
-        Book <strong>Your</strong> visit!
-      </Link>
-      <nav>
-        <Link to='/register'>Book a visit</Link>
-        <Link to='/admin'>For consultants</Link>
-      </nav>
-      {loggedIn && (
-        <nav>
-          <span> Logged in as admin</span>
-          <Link onClick={handleLogout} to='/login'>
-            Logout
-          </Link>
+    <header className={css.header}>
+      <div className={css.container}>
+        <Link to='/' className={css.logo}>
+          Book <strong>Your</strong> visit!
+        </Link>
+        <nav className={css.nav}>
+          <Link to='/admin'>For consultants</Link>
         </nav>
-      )}
+        {loggedIn && (
+          <nav>
+            <span> Logged in as admin</span>
+            <Link onClick={handleLogout} to='/login'>
+              Logout
+            </Link>
+          </nav>
+        )}
+      </div>
     </header>
   );
 };

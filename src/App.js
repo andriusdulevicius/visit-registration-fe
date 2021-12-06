@@ -12,7 +12,7 @@ function App() {
       <Layout>
         <Routes>
           <Route exact path='/' element={<MainPage />} />
-          <Route path='/register' element={<Booking />} />
+          <Route path='/booking' element={<Booking />} />
           <Route path='/admin' element={<Admin />} />
         </Routes>
       </Layout>

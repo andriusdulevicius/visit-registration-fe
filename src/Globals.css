@@ -23,6 +23,12 @@ a {
   cursor: pointer;
 }
 
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
 button {
   cursor: pointer;
 }
