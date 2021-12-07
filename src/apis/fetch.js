@@ -26,7 +26,7 @@ export const addNewCostumer = async (newCostumer) => {
 
 export const getCostumers = async () => {
   try {
-    const res = await fetch(`${fetchApiUrl}/AllCostumers`, reqOptions);
+    const res = await fetch(`${fetchApiUrl}/allCostumers`, reqOptions);
     const data = await res.json();
     return data;
   } catch (err) {

@@ -1,19 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getSortedCostumers } from '../../utils/helperFns';
+import { getCostumers, cancelCostumerVisit } from '../../apis/fetch';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
 import { RiUser3Fill, RiUser3Line, RiUserVoiceFill } from 'react-icons/ri';
 
-const dummyPeopleInLine = 0;
 const availableConsultants = 2;
 
 const BookingScreen = () => {
+  const [peopleInLine, setPeopleInLine] = useState(0);
+  const [registeredPersonsRef, setRegisteredPersonsRef] = useState('');
+  const [registeredPersonsId, setRegisteredPersonsId] = useState('');
   const navigate = useNavigate();
 
-  function handleCancelation() {
+  useEffect(() => {
+    (async () => {
+      const existingCostumers = await getCostumers();
+      setPeopleInLine(existingCostumers.length);
+    })();
+    setPersonalInfo();
+  }, []);
+
+  async function setPersonalInfo() {
+    const sortedCostumersArr = await getSortedCostumers();
+    const latestPersonsRef = sortedCostumersArr[0]?.reference;
+    const latestPersonsId = sortedCostumersArr[0]?._id;
+    setRegisteredPersonsRef(latestPersonsRef);
+    setRegisteredPersonsId(latestPersonsId);
+  }
+
+  async function handleCancelation() {
+    console.log(registeredPersonsId);
+
+    await cancelCostumerVisit(registeredPersonsId);
     console.log('canceling appointment');
     navigate('/');
   }
+
+  const averageWaitingTime = Math.round((peopleInLine / availableConsultants) * 5);
 
   return (
     <div className='container'>
@@ -24,8 +49,8 @@ const BookingScreen = () => {
         <AnimatedCard color='green'>
           <RiUser3Fill size={50} />
         </AnimatedCard>
-        {dummyPeopleInLine > 0 &&
-          [...Array(dummyPeopleInLine)].map((_, index) => (
+        {peopleInLine > 0 &&
+          [...Array(peopleInLine)].map((_, index) => (
             <AnimatedCard color='gray' key={index}>
               <RiUser3Line size={50} />
             </AnimatedCard>
@@ -36,13 +61,12 @@ const BookingScreen = () => {
         </AnimatedCard>
       </div>
       <h4 className={css.info}>
-        You have {dummyPeopleInLine} {dummyPeopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time
-        is approximately{' '}
-        {availableConsultants > dummyPeopleInLine ? 0 : Math.round((dummyPeopleInLine / availableConsultants) * 5)}{' '}
-        minutes at the moment. You will be invited to your appointment shortly...
+        You have {peopleInLine} {peopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time is
+        approximately {availableConsultants > peopleInLine ? 0 : averageWaitingTime} minutes at the moment. You will be
+        invited to your appointment shortly...
       </h4>
       <h4 className={css.reference}>
-        Your booking reference number is <strong>xxx</strong>
+        Your booking reference number is <strong>{registeredPersonsRef}</strong>
       </h4>
       <button className={css.cancel} onClick={handleCancelation}>
         Cancel your booking

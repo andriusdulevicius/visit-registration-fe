@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import css from './AdminScreen.module.css';
 import GenerateVisit from './GenerateVisit';
+import { getCostumers } from '../../apis/fetch';
 
 const AdminScreen = ({ setIsLoggedIn }) => {
-  const [registeredClients, setRegisteredClients] = useState([
-    { generatedRef: 'ascvb123', createdAt: '11pm' },
-    { generatedRef: 'ascvb124', createdAt: '10pm' },
-    { generatedRef: 'ascvb125', createdAt: '13pm' },
-    { generatedRef: 'ascvb126', createdAt: '14pm' },
-    { generatedRef: 'ascvb127', createdAt: '15pm' },
-    { generatedRef: 'ascvb128', createdAt: '16pm' },
-    { generatedRef: 'ascvb129', createdAt: '17pm' },
-    { generatedRef: 'ascvb120', createdAt: '18pm' },
-    { generatedRef: 'ascvb121', createdAt: '19pm' },
-  ]);
+  const [registeredClients, setRegisteredClients] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const presentCostumers = await getCostumers();
+      setRegisteredClients(presentCostumers);
+    })();
+  }, []);
 
   return (
     <div className='container'>
@@ -32,12 +30,13 @@ const AdminScreen = ({ setIsLoggedIn }) => {
             {registeredClients
               .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
               .slice(0, 6)
-              .map(({ generatedRef, createdAt }) => (
+              .map(({ reference, createdAt, _id, active }) => (
                 <GenerateVisit
-                  key={generatedRef}
-                  reference={generatedRef}
-                  createdAt={createdAt}
-                  setRegisteredClients={setRegisteredClients}
+                  key={_id}
+                  id={_id}
+                  active={active}
+                  reference={reference}
+                  createdAt={createdAt.slice(11, 16)}
                 />
               ))}
           </tbody>

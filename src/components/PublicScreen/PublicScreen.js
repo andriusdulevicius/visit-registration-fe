@@ -1,11 +1,13 @@
 import React from 'react';
+import uuid from 'react-uuid';
+import { addNewCostumer } from '../../apis/fetch';
 
 import css from './PublicScreen.module.css';
 import { Link } from 'react-router-dom';
 
-const PublicScreen = ({ setNewCostumer }) => {
+const PublicScreen = () => {
   function handleNewBooking() {
-    console.log('new booking in progress');
+    addNewCostumer({ reference: uuid().slice(0, 5), active: false });
   }
 
   return (
@@ -19,12 +21,12 @@ const PublicScreen = ({ setNewCostumer }) => {
           Join waiting line
         </Link>
       </div>
-      <p className={css.caption}>
+      {/* <p className={css.caption}>
         Current waiting time is around XXX minutes. Already registered an appointment?{' '}
         <Link to='/booking' className={css.booking}>
           Go back to waiting page
         </Link>
-      </p>
+      </p> */}
     </div>
   );
 };
