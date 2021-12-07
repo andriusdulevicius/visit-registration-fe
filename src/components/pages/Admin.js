@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import LoginForm from '../LoginForm/LoginForm';
+import AdminScreen from '../AdminScreen/AdminScreen';
 
 const Admin = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
-    <div>
-      <h1>Admin page</h1>
-    </div>
+    <>
+      {isLoggedIn && <AdminScreen setIsLoggedIn={setIsLoggedIn} />}
+      {!isLoggedIn && <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+    </>
   );
 };
 

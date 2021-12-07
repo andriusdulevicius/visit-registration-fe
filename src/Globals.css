@@ -31,4 +31,6 @@ a {
 
 button {
   cursor: pointer;
+  border: none;
+  border-radius: 0.5rem;
 }
