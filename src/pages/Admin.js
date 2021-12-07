@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import LoginForm from '../LoginForm/LoginForm';
-import AdminScreen from '../AdminScreen/AdminScreen';
+import LoginForm from '../components/LoginForm/LoginForm';
+import AdminScreen from '../components/AdminScreen/AdminScreen';
 
 const Admin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

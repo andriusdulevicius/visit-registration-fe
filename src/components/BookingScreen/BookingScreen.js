@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
@@ -42,7 +42,7 @@ const BookingScreen = () => {
         minutes at the moment. You will be invited to your appointment shortly...
       </h4>
       <h4 className={css.reference}>
-        Your booking reference number is <strong>xxxx</strong>
+        Your booking reference number is <strong>xxx</strong>
       </h4>
       <button className={css.cancel} onClick={handleCancelation}>
         Cancel your booking

@@ -1,5 +1,5 @@
 import React from 'react';
-import BookingScreen from '../BookingScreen/BookingScreen';
+import BookingScreen from '../components/BookingScreen/BookingScreen';
 
 const Booking = () => {
   return <BookingScreen />;

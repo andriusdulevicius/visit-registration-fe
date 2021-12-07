@@ -1,8 +1,9 @@
 import React from 'react';
+
 import css from './PublicScreen.module.css';
 import { Link } from 'react-router-dom';
 
-const PublicScreen = () => {
+const PublicScreen = ({ setNewCostumer }) => {
   function handleNewBooking() {
     console.log('new booking in progress');
   }

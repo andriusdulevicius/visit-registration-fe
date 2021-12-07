@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import './Globals.css';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import Layout from './components/Layout/Layout';
-import Admin from './components/pages/Admin';
-import Booking from './components/pages/Booking';
-import MainPage from './components/pages/MainPage';
+import Layout from './Layout/Layout';
+import Admin from './pages/Admin';
+import Booking from './pages/Booking';
+import MainPage from './pages/MainPage';
 
 function App() {
   return (

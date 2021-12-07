@@ -1,5 +1,5 @@
 import React from 'react';
-import PublicScreen from '../PublicScreen/PublicScreen';
+import PublicScreen from '../components/PublicScreen/PublicScreen';
 
 const MainPage = () => {
   return <PublicScreen />;
