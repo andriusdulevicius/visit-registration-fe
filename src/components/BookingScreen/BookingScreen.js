@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getSortedCostumers } from '../../utils/helperFns';
 import { getCostumers, cancelCostumerVisit } from '../../apis/fetch';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
 import { RiUser3Fill, RiUser3Line, RiUserVoiceFill } from 'react-icons/ri';
 
-const availableConsultants = 2;
+const availableConsultants = 1;
 
 const BookingScreen = () => {
   const [peopleInLine, setPeopleInLine] = useState(0);
@@ -17,17 +16,22 @@ const BookingScreen = () => {
   useEffect(() => {
     (async () => {
       const existingCostumers = await getCostumers();
-      setPeopleInLine(existingCostumers.length);
+      if (existingCostumers) {
+        setPeopleInLine(existingCostumers.length - 1);
+      }
     })();
     setPersonalInfo();
   }, []);
 
   async function setPersonalInfo() {
-    const sortedCostumersArr = await getSortedCostumers();
-    const latestPersonsRef = sortedCostumersArr[0]?.reference;
-    const latestPersonsId = sortedCostumersArr[0]?._id;
-    setRegisteredPersonsRef(latestPersonsRef);
-    setRegisteredPersonsId(latestPersonsId);
+    const costumersArr = await getCostumers();
+    if (costumersArr) {
+      const sortedCostumersArr = costumersArr.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+      const latestPersonsRef = sortedCostumersArr[0].reference;
+      const latestPersonsId = sortedCostumersArr[0]._id;
+      setRegisteredPersonsRef(latestPersonsRef);
+      setRegisteredPersonsId(latestPersonsId);
+    }
   }
 
   async function handleCancelation() {
@@ -60,14 +64,19 @@ const BookingScreen = () => {
           <RiUser3Fill size={50} />
         </AnimatedCard>
       </div>
-      <h4 className={css.info}>
-        You have {peopleInLine} {peopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time is
-        approximately {availableConsultants > peopleInLine ? 0 : averageWaitingTime} minutes at the moment. You will be
-        invited to your appointment shortly...
-      </h4>
-      <h4 className={css.reference}>
-        Your booking reference number is <strong>{registeredPersonsRef}</strong>
-      </h4>
+      {peopleInLine >= 0 && (
+        <>
+          <h4 className={css.info}>
+            You have {peopleInLine} {peopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time is
+            approximately {availableConsultants > peopleInLine ? 0 : averageWaitingTime} minutes at the moment. You will
+            be invited to your appointment shortly...
+          </h4>
+          <h4 className={css.reference}>
+            Your booking reference number is <strong>{registeredPersonsRef}</strong>
+          </h4>
+        </>
+      )}
+      {peopleInLine < 0 && <p className={css.error}>Sorry, error connecting to a server, please try again.</p>}
       <button className={css.cancel} onClick={handleCancelation}>
         Cancel your booking
       </button>

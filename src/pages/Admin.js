@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import LoginForm from '../components/LoginForm/LoginForm';
+
 import AdminScreen from '../components/AdminScreen/AdminScreen';
 
 const Admin = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const auth = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <>
-      {isLoggedIn && <AdminScreen setIsLoggedIn={setIsLoggedIn} />}
-      {!isLoggedIn && <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+      {auth && <AdminScreen />}
+      {!auth && <LoginForm />}
     </>
   );
 };

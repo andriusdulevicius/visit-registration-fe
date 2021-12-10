@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store/authRedux';
 import css from './LoginForm.module.css';
 
 const LoginForm = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
+  const existingUsers = useSelector((state) => state.auth.users);
+  const dispatch = useDispatch();
 
   const errorList = {
     EMPTY: 'Fields can not be empty, please fill in.',
@@ -15,9 +19,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
   const emailValidationRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  // Mock UserDB for task only, this should not be stored in code for security reasons
-  const validUserBase = { email: 'frontend@isawesome.com', password: 'cool' };
-
   const loginHandler = async (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
@@ -27,9 +28,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
     if (!emailValidationRegex.test(email)) {
       setErr('INVALID_EMAIL');
     }
-    if (email !== validUserBase.email || password !== validUserBase.password) {
-      setErr('INVALID_USER');
-    } else setIsLoggedIn(true);
+
+    existingUsers &&
+      existingUsers.map((user) => {
+        if (user.email === email && user.password === password) {
+          dispatch(authActions.setLoggedInUser({ email, password }));
+          dispatch(authActions.login());
+        } else setErr('INVALID_USER');
+      });
   };
 
   useEffect(() => {

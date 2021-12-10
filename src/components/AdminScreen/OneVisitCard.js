@@ -1,20 +1,32 @@
 import React from 'react';
 import { cancelCostumerVisit, editCostumerStatus, getCostumers } from '../../apis/fetch';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store/authRedux';
+import { visitsActions } from '../../store/visitsRedux';
 import css from './AdminScreen.module.css';
 
-const GenerateVisit = ({ reference, createdAt, id, active }) => {
+const OneVisitCard = ({ reference, createdAt, id, active }) => {
+  const dispatch = useDispatch();
+  const allVisits = useSelector((state) => state.visits.allVisits);
+
   async function setActiveVisit(id) {
-    const existingCostumers = await getCostumers();
-    if (existingCostumers.find((c) => c.active === true)) return;
+    if (allVisits.find((c) => c.active === true)) return;
     await editCostumerStatus(id, { active: true });
+    const newAllVisits = allVisits.map((c) => (c._id === id ? { ...c, active: true } : c));
+    dispatch(visitsActions.getAllVisits2(newAllVisits));
   }
 
   async function handleEnnOfVisit(id) {
     await editCostumerStatus(id, { active: false });
     await cancelCostumerVisit(id);
+    const newAllVisits = allVisits.filter((v) => v._id !== id);
+    dispatch(visitsActions.getAllVisits2(newAllVisits));
   }
   async function handleCancelVisit(id) {
     await cancelCostumerVisit(id);
+    const newAllVisits = allVisits.filter((v) => v._id !== id);
+    dispatch(visitsActions.getAllVisits2(newAllVisits));
   }
 
   return (
@@ -36,4 +48,4 @@ const GenerateVisit = ({ reference, createdAt, id, active }) => {
   );
 };
 
-export default GenerateVisit;
+export default OneVisitCard;
